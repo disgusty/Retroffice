@@ -1,0 +1,13 @@
+* text=auto
+gradlew text eol=lf
+*.bat text eol=crlf
+*.jar binary
+*.png binary
+*.docx binary
+*.xlsx binary
+*.pptx binary
+*.odt binary
+*.ods binary
+*.odp binary
+# Encoding test fixtures: keep their exact bytes (CRLF, BOM, cp1251)
+app/src/androidTest/assets/** binary

@@ -1,0 +1,21 @@
+# Build output
+build/
+.gradle/
+*.apk
+*.aab
+
+# Local machine settings
+local.properties
+.idea/
+*.iml
+.vscode/
+
+# Release signing key and its password — never publish these
+signing/
+*.jks
+*.keystore
+keystore.properties
+
+# OS junk
+.DS_Store
+Thumbs.db

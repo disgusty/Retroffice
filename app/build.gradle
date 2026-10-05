@@ -1,0 +1,78 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.disgusty.retroffice'
+    compileSdk 36
+    // Classic android.test.* instrumentation (works down to API 1, no AndroidX needed).
+    useLibrary 'android.test.runner'
+    useLibrary 'android.test.base'
+
+    defaultConfig {
+        applicationId 'com.disgusty.retroffice'
+        // Android 1.0 (API 1) and up. Every call above API 1 must be guarded by Build.VERSION
+        // checks — lint's NewApi check is an error below, so an unguarded call fails the build.
+        minSdk 1
+        targetSdk 35
+        versionCode 1
+        versionName '1.0'
+        testInstrumentationRunner 'android.test.InstrumentationTestRunner'
+    }
+
+    // Release key (owner CN=disgusty). RSA so that Android 1.x can verify the v1 (JAR) signature.
+    def keyProps = new Properties()
+    def keyFile = rootProject.file('signing/keystore.properties')
+    if (keyFile.exists()) keyFile.withInputStream { keyProps.load(it) }
+
+    signingConfigs {
+        disgusty {
+            if (keyFile.exists()) {
+                storeFile file(keyProps['storeFile'])
+                storePassword keyProps['storePassword']
+                keyAlias keyProps['keyAlias']
+                keyPassword keyProps['keyPassword']
+            }
+            enableV1Signing true
+            enableV2Signing true
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig keyFile.exists() ? signingConfigs.disgusty : signingConfigs.debug
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    lint {
+        abortOnError true
+        checkReleaseBuilds true
+        error 'NewApi', 'InlinedApi'
+        disable 'MinSdkTooLow', 'ExpiredTargetSdkVersion', 'OldTargetApi', 'GradleDependency',
+                'SetTextI18n', 'HardcodedText', 'RtlHardcoded', 'RtlSymmetry', 'UnusedAttribute',
+                'ObsoleteSdkInt', 'DrawAllocation', 'ClickableViewAccessibility', 'MissingApplicationIcon',
+                // commit() is deliberate: apply() doesn't exist before API 9 and we want writes on disk now.
+                'ApplySharedPref',
+                // No AndroidX here; @TargetApi on the per-level Compat classes is intended.
+                'UseRequiresApi',
+                // Android 1.0-1.5 only read the density-less drawable folder.
+                'IconLocation', 'IconMissingDensityFolder',
+                'ViewConstructor', 'AndroidGradlePluginVersion'
+    }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+}
+
+dependencies {
+    testImplementation 'junit:junit:4.13.2'
+    // A real XmlPullParser for JVM unit tests (Android's android.jar ships a stub).
+    testImplementation 'net.sf.kxml:kxml2:2.3.0'
+}
