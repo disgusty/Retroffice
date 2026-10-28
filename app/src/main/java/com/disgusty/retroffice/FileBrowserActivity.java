@@ -32,8 +32,9 @@ import com.disgusty.retroffice.ui.Skin;
  */
 public class FileBrowserActivity extends Activity {
     public static final String EXTRA_SAVE = "save", EXTRA_NAME = "name";
-    private static final HashSet<String> EXTS = new HashSet<String>(Arrays.asList("odt", "ods", "odp", "docx",
-            "xlsx", "pptx", "csv", "tsv", "txt", "text", "md", "log", "xml", "json", "ini", "fodt"));
+    private static final HashSet<String> EXTS = new HashSet<String>(Arrays.asList("odt", "ods", "odp", "ott", "ots",
+            "otp", "docx", "docm", "dotx", "xlsx", "xlsm", "xltx", "pptx", "pptm", "potx", "doc", "dot", "xls", "xlt",
+            "ppt", "pps", "pot", "rtf", "csv", "tsv", "txt", "text", "md", "log", "xml", "json", "ini"));
 
     private Skin skin;
     private RootLayout root;

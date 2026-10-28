@@ -3,7 +3,7 @@
     <string name="app_name">Retroffice</string>
     <string name="subtitle">Просмотр и редактирование документов</string>
     <string name="open_document">Открыть документ</string>
-    <string name="opens_formats">Открывает ODF, Word, Excel, PowerPoint, CSV, TSV и обычный текст</string>
+    <string name="opens_formats">Открывает ODF, Word, Excel и PowerPoint (в том числе 97–2003), RTF, CSV, TSV и обычный текст</string>
     <string name="new_doc">Новый документ</string>
     <string name="new_sheet">Новая таблица</string>
     <string name="new_slides">Новая презентация</string>
@@ -53,7 +53,7 @@
     <string name="switched_utf8">Сохранено в UTF-8: в тексте есть символы, которые исходная кодировка не поддерживает.</string>
     <string name="open_failed_title">Не удалось открыть документ</string>
     <string name="err_protected">Документ защищён паролем. Зашифрованные документы не поддерживаются.</string>
-    <string name="err_legacy">Это старый двоичный формат Office (.doc, .xls, .ppt). Сначала преобразуйте его в современный формат.</string>
+    <string name="err_legacy">В этом старом файле Office нет документа, который Retroffice умеет читать.</string>
     <string name="err_unsupported">Этот тип файлов не поддерживается.</string>
     <string name="err_damaged">Файл повреждён или не является корректным документом. Ничего не изменено.\n\nПодробности: %1$s</string>
     <string name="err_too_large">Документ слишком большой для этого устройства.</string>
@@ -98,4 +98,5 @@
     <string name="file_exists_title">Заменить файл?</string>
     <string name="file_exists_message">«%1$s» уже существует.</string>
     <string name="replace">Заменить</string>
+    <string name="converted_note">Документ сконвертирован из %1$s. Оригинал не меняется, при сохранении создаётся новый файл %2$s.</string>
 </resources>

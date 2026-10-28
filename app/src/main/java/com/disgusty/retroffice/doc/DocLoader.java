@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+import com.disgusty.retroffice.legacy.LegacyConverter;
+import com.disgusty.retroffice.legacy.LegacyFormatException;
 import com.disgusty.retroffice.pkg.OfficePackage;
 import com.disgusty.retroffice.sheet.CsvDoc;
 import com.disgusty.retroffice.sheet.OdsDoc;
@@ -29,7 +31,7 @@ public final class DocLoader {
 
     public static Doc open(File f, String displayName, Images images) throws OpenException {
         String ext = FileUtil.extension(displayName);
-        byte[] head = new byte[8];
+        byte[] head = new byte[64];
         int n = 0;
         try {
             FileInputStream in = new FileInputStream(f);
@@ -45,12 +47,20 @@ public final class DocLoader {
             Doc d;
             if (n >= 4 && head[0] == 'P' && head[1] == 'K' && head[2] == 3 && head[3] == 4) {
                 d = openPackage(f, images);
-            } else if (n >= 8 && (head[0] & 0xFF) == 0xD0 && (head[1] & 0xFF) == 0xCF && (head[2] & 0xFF) == 0x11 && (head[3] & 0xFF) == 0xE0) {
-                // OLE container: legacy .doc/.xls/.ppt, or an encrypted OOXML file.
-                if (ext.equals("docx") || ext.equals("xlsx") || ext.equals("pptx")) {
-                    throw new OpenException(OpenException.PROTECTED, "Password-protected document");
+            } else if (n > 0 && LegacyConverter.isLegacy(head)) {
+                // .doc/.xls/.ppt (OLE container) or RTF: convert to OpenDocument and open that.
+                // The document then has no save location: saving asks where to put the new file.
+                LegacyConverter.Result r;
+                try {
+                    r = LegacyConverter.convert(f, f.getParentFile());
+                } catch (LegacyFormatException e) {
+                    throw new OpenException(e.encrypted ? OpenException.PROTECTED : OpenException.UNSUPPORTED, e.getMessage());
                 }
-                throw new OpenException(OpenException.LEGACY, "Legacy binary format");
+                if (r == null) throw new OpenException(OpenException.UNSUPPORTED, "Unknown OLE document");
+                d = openPackage(r.file, images);
+                d.displayName = FileUtil.baseName(displayName) + "." + r.extension;
+                d.convertedFrom = r.sourceFormat;
+                return d;
             } else if (n >= 4 && head[0] == '%' && head[1] == 'P' && head[2] == 'D' && head[3] == 'F') {
                 throw new OpenException(OpenException.UNSUPPORTED, "PDF");
             } else if (ext.equals("csv") || ext.equals("tsv") || ext.equals("tab")) {

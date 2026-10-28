@@ -67,6 +67,8 @@ public class MainActivity extends Activity implements DocEditor.Host {
             "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
             "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+            "application/msword", "application/vnd.ms-word", "application/vnd.ms-excel",
+            "application/vnd.ms-powerpoint", "application/rtf", "text/rtf", "application/x-rtf",
             "text/csv", "text/comma-separated-values", "text/tab-separated-values", "text/plain",
             "application/octet-stream", "application/zip",
     };
@@ -327,8 +329,10 @@ public class MainActivity extends Activity implements DocEditor.Host {
     }
 
     static String iconFor(String ext) {
-        if (ext.equals("ods") || ext.equals("xlsx") || ext.equals("csv") || ext.equals("tsv") || ext.equals("ots")) return Icons.SHEET;
-        if (ext.equals("odp") || ext.equals("pptx") || ext.equals("otp")) return Icons.SLIDES;
+        if (ext.equals("ods") || ext.equals("xlsx") || ext.equals("xls") || ext.equals("xlsm") || ext.equals("xlt")
+                || ext.equals("csv") || ext.equals("tsv") || ext.equals("ots")) return Icons.SHEET;
+        if (ext.equals("odp") || ext.equals("pptx") || ext.equals("ppt") || ext.equals("pps") || ext.equals("pot")
+                || ext.equals("pptm") || ext.equals("otp")) return Icons.SLIDES;
         return Icons.DOC;
     }
 
@@ -464,7 +468,14 @@ public class MainActivity extends Activity implements DocEditor.Host {
                         public void run() {
                             hideBusy();
                             HistoryStore.add(MainActivity.this, uri.toString(), fname);
-                            showEditor(d, uri, fwd, false, false);
+                            if (d.convertedFrom != null) {
+                                // Old binary/RTF formats are read-only here: edits are saved as a new ODF file.
+                                showEditor(d, null, fwd, true, false);
+                                Toast.makeText(MainActivity.this, getString(R.string.converted_note, d.convertedFrom,
+                                        FileUtil.extension(d.displayName).toUpperCase(java.util.Locale.US)), Toast.LENGTH_LONG).show();
+                            } else {
+                                showEditor(d, uri, fwd, false, false);
+                            }
                         }
                     });
                 } catch (final Throwable t) {

@@ -13,6 +13,8 @@ public abstract class Doc {
 
     /** File name shown to the user, including extension. */
     public String displayName;
+    /** Source format ("DOC", "XLS", "PPT", "RTF") when this is a converted copy, else null. */
+    public String convertedFrom;
     protected String savedFingerprint;
 
     public abstract int kind();

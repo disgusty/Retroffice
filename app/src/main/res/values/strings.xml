@@ -3,7 +3,7 @@
     <string name="app_name">Retroffice</string>
     <string name="subtitle">Open Document Format viewer &amp; editor</string>
     <string name="open_document">Open document</string>
-    <string name="opens_formats">Opens ODF, Word, Excel, PowerPoint, CSV, TSV and plain text</string>
+    <string name="opens_formats">Opens ODF, Word, Excel and PowerPoint (including 97–2003), RTF, CSV, TSV and plain text</string>
     <string name="new_doc">New document</string>
     <string name="new_sheet">New spreadsheet</string>
     <string name="new_slides">New presentation</string>
@@ -53,7 +53,7 @@
     <string name="switched_utf8">Saved as UTF-8: the text contains characters the original encoding can\'t store.</string>
     <string name="open_failed_title">Could not open the document</string>
     <string name="err_protected">The document is password-protected. Encrypted documents aren\'t supported.</string>
-    <string name="err_legacy">This is an old binary Office file (.doc, .xls, .ppt). Please convert it to a modern format first.</string>
+    <string name="err_legacy">This old Office file contains no document Retroffice can read.</string>
     <string name="err_unsupported">This file type isn\'t supported.</string>
     <string name="err_damaged">The file seems to be damaged or isn\'t a valid document. Nothing was changed.\n\nDetails: %1$s</string>
     <string name="err_too_large">The document is too large for this device.</string>
@@ -98,4 +98,5 @@
     <string name="file_exists_title">Replace file?</string>
     <string name="file_exists_message">\"%1$s\" already exists.</string>
     <string name="replace">Replace</string>
+    <string name="converted_note">Converted from %1$s. The original file stays unchanged; saving creates a new %2$s file.</string>
 </resources>
